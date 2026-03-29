@@ -1,33 +1,48 @@
-# Social Media Posting API Test
+# Social Posting API
 
-Test scripts for evaluating unified social media APIs for CanMarket.
+Multi-provider social media posting API with automatic fallback.
 
-## Quick Start
+## What This Does
+
+A unified Python client for posting content to social media platforms (Twitter, LinkedIn, Instagram, Facebook, TikTok, Threads, Bluesky, YouTube, Pinterest). Uses a dual-provider architecture — PostForMe as the primary (cheaper, volume-friendly) and LATE as the fallback (reliable backup). Supports text posts, media attachments, and multi-platform publishing in a single call.
+
+## Tech Stack
+
+- Python 3.11+
+- requests (HTTP client)
+- PostForMe API (primary provider)
+- LATE API (fallback provider)
+
+## Setup
 
 ```bash
-# 1. Install dependencies
+git clone https://github.com/Canlah-AI/social-posting-api.git
+cd social-posting-api
+cp .env.example .env  # Fill in PostForMe and LATE API keys
 pip install -r requirements.txt
-
-# 2. Set up LATE account (free tier)
-# Go to https://getlate.dev and sign up
-# Connect your Twitter/LinkedIn accounts
-# Get API key from Settings > API
-
-# 3. Set environment variable
-export LATE_API_KEY='your_key_here'
-
-# 4. Run test
-python test_late_api.py
 ```
 
-## API Options Evaluated
+## Usage
 
-| Provider | Free Tier | Price | Best For |
-|----------|-----------|-------|----------|
-| LATE | 10 posts/mo | $19-49/mo | Developer experience |
-| Post for Me | No | $10+/mo | Volume pricing |
-| Ayrshare | 20 posts/mo | $149+/mo | Enterprise |
+```python
+from social_posting import SocialPostingClient
 
-## Integration for CanMarket
+client = SocialPostingClient()
+result = client.post(
+    content="Hello world!",
+    platforms=["linkedin", "instagram"],
+    media_urls=["https://example.com/image.jpg"]
+)
+```
 
-See `canmarket_integration.py` for production-ready code.
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `social_posting.py` | Unified client with provider abstraction and auto-fallback |
+| `canmarket_integration.py` | Integration adapter for CanMarket pipeline |
+| `test_late_api.py` | Provider test scripts |
+
+## Related
+
+Used by [canmarket-bot](https://github.com/Canlah-AI/canmarket-bot) for automated content publishing. Part of the [CanMarket](https://github.com/Canlah-AI/market) ecosystem.
